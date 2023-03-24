@@ -1,6 +1,5 @@
 import datetime
 
-import jdatetime
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -30,21 +29,6 @@ class Coupon(Base):
         alphabet = string.ascii_uppercase + string.digits
         self.code = ''.join(secrets.choice(alphabet) for _ in range(10))
         return ''.join(secrets.choice(alphabet) for _ in range(10))
-
-    @classmethod
-    def generate_bulk_codes(cls, count):
-        # Generate multiple coupon codes
-        codes = []
-        for i in range(count):
-            code = cls.generate_code()
-            while code in codes:
-                # Make sure the generated code is unique
-                code = cls.generate_code()
-            codes.append(code)
-        return codes
-
-    def is_valid(self):
-        pass
 
     def __len__(self):
         return len(self.used_coupons)
