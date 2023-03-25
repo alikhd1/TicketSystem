@@ -14,6 +14,9 @@ class Coupon(Base):
     expired_time = Column(Date)
     code = Column(String, unique=True)
     use_limit = Column(Integer, default=1)
+    full_name = Column(String)
+    national_code = Column(String)
+    personnel_code = Column(String)
     used_coupons = relationship("UsedCoupon", back_populates="coupon")
 
     def __init__(self, expired_time, *args, **kwargs):
