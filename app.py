@@ -208,8 +208,8 @@ class MainWindow(QMainWindow):
 
     def save_info(self):
         try:
-            int(self.national_input.text())
-            int(self.personnel_input.text())
+            int(self.national_input.text() or 1)
+            int(self.personnel_input.text() or 1)
         except ValueError:
             QMessageBox.information(self, "Error", "کدملی و شماره پرسنلی باید عددی باشند")
             return
