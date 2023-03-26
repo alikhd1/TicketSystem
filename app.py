@@ -87,7 +87,6 @@ class MainWindow(QMainWindow):
         self.use_table_view.setModel(self.use_model)
 
         check_coupons_layout = QtWidgets.QFormLayout()
-        # check_coupons_layout.addRow(self.label1, self.code)
         check_coupons_layout.addRow(layout)
         check_coupons_layout.addRow(self.button__check)
         check_coupons_layout.addRow(self.button__submit)
@@ -120,7 +119,6 @@ class MainWindow(QMainWindow):
         add_coupon_layout.addWidget(self.coupon_use_limit_input)
         add_coupon_layout.addWidget(self.create_coupon_button)
         coupons_layout.addLayout(add_coupon_layout)
-        self.setLayout(coupons_layout)
 
         # Connect the UI signals
         self.create_coupon_button.clicked.connect(self.add_coupon)
