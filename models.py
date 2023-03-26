@@ -1,5 +1,8 @@
 import datetime
 
+import secrets
+import string
+
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -25,13 +28,8 @@ class Coupon(Base):
         self.generate_code()
 
     def generate_code(self):
-        # Generate a random coupon code
-        # Here's an example implementation using the `secrets` module:
-        import secrets
-        import string
-        alphabet = string.ascii_uppercase + string.digits
-        self.code = ''.join(secrets.choice(alphabet) for _ in range(10))
-        return ''.join(secrets.choice(alphabet) for _ in range(10))
+        code = ''.join(secrets.choice(string.digits) for _ in range(12))
+        self.code = code
 
     def __len__(self):
         return len(self.used_coupons)
