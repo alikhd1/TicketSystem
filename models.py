@@ -7,6 +7,8 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
+from utils.barcode import generate_checksum
+
 Base = declarative_base()
 
 
@@ -29,7 +31,7 @@ class Coupon(Base):
 
     def generate_code(self):
         code = ''.join(secrets.choice(string.digits) for _ in range(12))
-        self.code = code
+        self.code = generate_checksum(code)
 
     def __len__(self):
         return len(self.used_coupons)
