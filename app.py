@@ -30,6 +30,7 @@ class MainWindow(QMainWindow):
         layout = QGridLayout(self)
 
         self.label1 = QtWidgets.QLabel('کد')
+        self.code_result_label = QtWidgets.QLabel('')
         self.name_label = QtWidgets.QLabel('نام')
         self.national_label = QtWidgets.QLabel('کد ملی')
         self.personnel_label = QtWidgets.QLabel('شماره پرسنلی')
@@ -50,6 +51,8 @@ class MainWindow(QMainWindow):
 
         layout.addWidget(self.label1, 0, 0)
         layout.addWidget(self.code, 0, 1)
+
+        layout.addWidget(self.code_result_label, 0, 3)
 
         layout.addWidget(self.result, 0, 5)
         layout.addWidget(self.label2, 0, 6)
@@ -161,9 +164,12 @@ class MainWindow(QMainWindow):
         today = datetime.date.today()
         used_coupons = []
 
-        self.name_input.setText('')
-        self.national_input.setText('')
-        self.personnel_input.setText('')
+        self.code_result_label.setText(code)
+
+        self.code.clear()
+        self.name_input.clear()
+        self.national_input.clear()
+        self.personnel_input.clear()
 
         if coupon is not None:
             self.button__save.setEnabled(True)
