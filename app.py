@@ -1,3 +1,6 @@
+import logging
+import sys
+
 import jdatetime
 
 from PyQt5 import QtWidgets, QtCore
@@ -9,6 +12,7 @@ from PyQt5.QtCore import Qt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from utils.exception import exception_hook
 from models import Coupon, UsedCoupon, Base
 from utils.date import get_this_month_first_and_last_day, date2jalali
 from utils.excel import save_to_excel
@@ -141,6 +145,11 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
+    def get_selected_item(self):
+        listed_items = self.table_view.selectedIndexes()
+        for index in listed_items:
+            print(self.table_view.model().index(index.row(), 1).data())
+
     def load_coupons(self):
         self.model.removeRows(0, self.model.rowCount())
         coupons = self.session.query(Coupon).all()
@@ -248,17 +257,17 @@ class MainWindow(QMainWindow):
 
         self.button__save.setEnabled(False)
 
-
     def add_coupon(self):
         codes = []
         if validate_jalali_date_format(self.coupon_expire_input.text()):
-            count = int(self.coupon_count_input.text())
+            count = int(self.coupon_count_input.text() or 1)
             raw_jdate = list(map(int, self.coupon_expire_input.text().split('/')))
             use_limit = int(self.coupon_use_limit_input.text())
             expire_date = jdatetime.date(year=raw_jdate[0], month=raw_jdate[1], day=raw_jdate[2]).togregorian()
             for i in range(count):
                 coupon = Coupon(expired_time=expire_date, use_limit=use_limit)
-                if coupon.code not in codes and self.session.query(Coupon).filter(Coupon.code == coupon.code).first() is None:
+                if coupon.code not in codes and self.session.query(Coupon).filter(
+                        Coupon.code == coupon.code).first() is None:
                     codes.append(coupon.code)
                     self.session.add(coupon)
             self.session.commit()
@@ -270,8 +279,11 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(filename='myapp.log', level=logging.DEBUG,
+                        format='%(asctime)s %(levelname)s:%(message)s (%(filename)s)')
+    sys.excepthook = exception_hook
     app = QApplication([])
     window = MainWindow()
     window.setLayoutDirection(QtCore.Qt.RightToLeft)
     window.show()
-    app.exec_()
+    sys.exit(app.exec_())
