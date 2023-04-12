@@ -31,6 +31,9 @@ class Coupon(Base):
 
     def generate_code(self):
         code = ''.join(secrets.choice(string.digits) for _ in range(12))
+        while code[0] == '0':
+            #  because of ups prefix barcodes with 0, barcode should not be started with 0
+            code = ''.join(secrets.choice(string.digits) for _ in range(12))
         self.code = generate_checksum(code)
 
     def __len__(self):
