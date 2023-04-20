@@ -189,7 +189,9 @@ class MainWindow(QMainWindow):
             if coupon.expired_time >= today:
                 d_from, d_to = get_this_month_first_and_last_day(gregorian=True)
                 used_coupons = self.session.query(UsedCoupon).filter(
-                    UsedCoupon.coupon_id == coupon.id, UsedCoupon.use_time.between(d_from, d_to)
+                    UsedCoupon.coupon_id == coupon.id,
+                    func.DATE(UsedCoupon.use_time) >= d_from,
+                    func.DATE(UsedCoupon.use_time) <= d_to
                 )
                 if len(list(used_coupons)) >= coupon.use_limit:
                     self.result.setText('دفعات مجاز استفاده از کد سپری شده است')
