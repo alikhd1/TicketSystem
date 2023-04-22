@@ -11,6 +11,7 @@ from PyQt5.QtCore import Qt
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.sql import func
 
 from utils.exception import exception_hook
 from models import Coupon, UsedCoupon, Base
